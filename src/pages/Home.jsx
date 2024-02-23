@@ -1,24 +1,20 @@
 // import Announcement from "../ui/Announcement";
-import NavBar from "../ui/NavBar";
-import Slider from "../ui/Slider";
-import Categories from "../ui/Categories";
-import Footer from "../ui/Footer";
-import Products from "../ui/Products";
-import Newsletter from "../ui/Newsletter";
-import Text from "../ui/Text";
+import Slider from "../components/Slider";
+import Categories from "../components/Categories";
+import Products from "../components/Products";
+import Newsletter from "../components/Newsletter";
+import Text from "../components/Text";
 
 function Home() {
   return (
     <div>
       {/* <Announcement /> */}
-      <NavBar />
       <Slider />
-      <Text>Danh mục sản phẩm</Text>
+      <Text title="Danh mục sản phẩm" />
       <Categories />
-      <Text>Sản phẩm bán chạy</Text>
+      <Text title="Gợi ý cho bạn" moreButton={true} link="/category/all" />
       <Products />
       <Newsletter />
-      <Footer />
     </div>
   );
 }

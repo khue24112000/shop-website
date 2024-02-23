@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 
 const Container = styled.div`
   flex: 1;
@@ -35,7 +36,7 @@ const Button = styled.button`
   color: white;
   padding: 10px;
   background-color: var(--primary-color);
-
+  border-radius: 10px;
   cursor: pointer;
   font-weight: 600;
   margin-bottom: 10px;
@@ -50,7 +51,9 @@ const CategoryItem = ({ item }) => {
       <Image src={item.img} />
       <Info>
         <Title>{item.title}</Title>
-        <Button>Mua ngay</Button>
+        <Link to={`/category/${item.cat}`}>
+          <Button>Mua ngay</Button>
+        </Link>
       </Info>
     </Container>
   );

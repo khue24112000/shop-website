@@ -1,7 +1,10 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { mobile } from "../responsive";
-import NavBar from "../ui/NavBar";
-import Footer from "../ui/Footer";
+import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { login } from "../redux/apiCalls";
+import { useDispatch, useSelector } from "react-redux";
+import { successToast } from "../redux/toastSlice";
 
 const Container = styled.div`
   width: 100vw;
@@ -17,6 +20,10 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  font-weight: 500;
+`;
+const bRadius10 = css`
+  border-radius: 10px;
 `;
 
 const Wrapper = styled.div`
@@ -24,13 +31,16 @@ const Wrapper = styled.div`
   width: 30%;
   padding: 30px;
   background-color: white;
+  ${bRadius10};
   ${mobile({ width: "75%" })}
-  box-shadow: var(--shadow-md)
+  box-shadow: var(--shadow-md);
 `;
 
 const Title = styled.h1`
-  font-size: 2.4rem;
-  font-weight: 300;
+  /* font-size: 2.4rem; */
+  text-align: center;
+  color: var(--primary-color);
+  /* font-weight: 300;   */
   text-transform: uppercase;
 `;
 
@@ -44,6 +54,11 @@ const Input = styled.input`
   min-width: 40%;
   margin: 10px 0;
   padding: 10px;
+  border: 1px solid var(--color-grey-300);
+  ${bRadius10};
+  &:focus {
+    border: 1px solid var(--primary-color);
+  }
 `;
 
 const Button = styled.button`
@@ -52,15 +67,24 @@ const Button = styled.button`
   background-color: var(--primary-color);
   color: white;
   cursor: pointer;
-  margin-bottom: 10px;
+  margin: 10px 0;
   text-transform: uppercase;
+  ${bRadius10};
+
+  &:hover {
+    opacity: 0.9;
+  }
+  &:disabled {
+    color: var(--primary-color);
+  }
 `;
 
-const Link = styled.a`
+const StyledLink = styled(Link)`
   margin: 5px 0px;
   font-size: 1.6rem;
-  text-decoration: underline;
+
   cursor: pointer;
+  color: var(--primary-color);
 `;
 
 const Register = styled.div`
@@ -70,26 +94,72 @@ const Register = styled.div`
   gap: 4px;
 `;
 
+const Error = styled.p`
+  color: red;
+`;
+
 const Login = () => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { currentUser, isLoading, error } = useSelector((state) => state.user);
+  const [errMessage, setErrMessage] = useState("");
+
+  useEffect(() => {
+    if (currentUser !== null) {
+      dispatch(successToast("Đăng nhập thành công"));
+      navigate(-1);
+    }
+  }, [currentUser, dispatch, navigate]);
+
+  function handleClick(e) {
+    e.preventDefault();
+    if (username !== "" && password !== "") {
+      setErrMessage("");
+      login(dispatch, { username, password });
+    } else setErrMessage("Tên đăng nhập và mật khẩu không được để trống");
+  }
+
   return (
     <>
-      <NavBar />
       <Container>
         <Wrapper>
           <Title>Đăng nhập</Title>
           <Form>
-            <Input placeholder="Tên đăng nhập" />
-            <Input placeholder="Mật khẩu" />
-            <Button>Đăng nhâp</Button>
-            <Link>Quên mật khẩu</Link>
+            <Input
+              value={username}
+              onChange={(e) => {
+                setUsername(e.target.value.trim());
+              }}
+              type="text"
+              placeholder="Tên đăng nhập"
+            />
+            <Input
+              value={password}
+              onChange={(e) => setPassword(e.target.value.trim())}
+              type="password"
+              placeholder="Mật khẩu"
+            />
+            <Button disabled={isLoading} onClick={handleClick}>
+              Đăng nhâp
+            </Button>
+            {/* <Link>Quên mật khẩu</Link> */}
+            {errMessage ? (
+              <Error>{errMessage}</Error>
+            ) : error ? (
+              <Error>Tên đăng nhập hoặc mật khẩu không đúng</Error>
+            ) : (
+              ""
+            )}
+
             <Register>
               Bạn chưa có tài khoản?
-              <Link>Đăng ký ngay</Link>
+              <StyledLink to="/register">Đăng ký ngay</StyledLink>
             </Register>
           </Form>
         </Wrapper>
       </Container>
-      <Footer />
     </>
   );
 };

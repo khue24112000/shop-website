@@ -1,9 +1,9 @@
 import styled from "styled-components";
 import { Facebook, Instagram } from "@mui/icons-material";
-import grd
 
 const Container = styled.footer`
-  margin-top: 56px;
+  margin-top: 36px;
+  padding-top: 36px;
   display: flex;
   flex-direction: column;
   gap: 40px;
@@ -24,6 +24,9 @@ const InfomationList = styled.ul`
 const InfomationItem = styled.li`
   font-weight: ${(props) => (props.$bold ? "600" : "400")};
   cursor: ${(props) => (props.$cursor ? "pointer" : "default")};
+  &:hover {
+    text-decoration: underline;
+  }
 `;
 const SocialNetwork = styled.div`
   display: flex;

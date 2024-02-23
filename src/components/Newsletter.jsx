@@ -1,5 +1,7 @@
 import styled from "styled-components";
 import { mobile } from "../responsive";
+import { useDispatch } from "react-redux";
+import { errorToast } from "../redux/toastSlice";
 
 const Container = styled.div`
   height: 60vh;
@@ -27,12 +29,14 @@ const InputContainer = styled.div`
   height: 40px;
   background-color: white;
   display: flex;
+  border-radius: 10px;
   justify-content: space-between;
   border: 1px solid lightgray;
   ${mobile({ width: "80%" })}
 `;
 
 const Input = styled.input`
+  border-radius: 10px;
   border: none;
   flex: 8;
   padding-left: 20px;
@@ -43,9 +47,16 @@ const Button = styled.button`
   border: none;
   background-color: #1976d2;
   color: white;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+
+  &:hover {
+    opacity: 0.9;
+  }
 `;
 
 const Newsletter = () => {
+  const dispatch = useDispatch();
   return (
     <Container>
       <Title>Đăng ký nhận bản tin</Title>
@@ -55,7 +66,11 @@ const Newsletter = () => {
       </Desc>
       <InputContainer>
         <Input placeholder="Nhập email đăng ký của bạn" />
-        <Button>Đăng ký</Button>
+        <Button
+          onClick={() => dispatch(errorToast("Chức năng đang phát triển"))}
+        >
+          Đăng ký
+        </Button>
       </InputContainer>
     </Container>
   );
